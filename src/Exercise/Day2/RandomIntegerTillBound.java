@@ -1,4 +1,4 @@
-package Exercise;
+package Exercise.Day2;
 
 import java.util.Random;
 

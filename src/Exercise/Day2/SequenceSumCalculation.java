@@ -1,4 +1,4 @@
-package Exercise;
+package Exercise.Day2;
 
 public class SequenceSumCalculation {
     public static void main(String[] args) {
