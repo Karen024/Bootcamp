@@ -7,6 +7,5 @@ public class StringConcatWithAnotherPrimitives {
         System.out.println(number1 + " + " + number2 + " = " + (Integer.parseInt(number1) + number2));
         double number3 = 15.0;
         System.out.println(number1 + " + " + number3 + " = " + (Double.parseDouble(number1) + number3));
-
     }
 }

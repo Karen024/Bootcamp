@@ -8,8 +8,10 @@ public class SecondLargestInSequence {
         int firstNumber = scn.nextInt();
         int firstLargest = firstNumber;
         int secondLargest = 0;
+        int count = 0;
         while (true) {
             firstNumber = scn.nextInt();
+            count++;
             if (firstNumber == 0) {
                 break;
             } else if (firstLargest <= firstNumber) {
@@ -21,6 +23,10 @@ public class SecondLargestInSequence {
                 }
             }
         }
-        System.out.println(secondLargest);
+        if (count == 1) {
+            System.out.println("No second largest");
+        } else {
+            System.out.println(secondLargest);
+        }
     }
 }
