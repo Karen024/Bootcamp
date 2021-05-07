@@ -1,0 +1,30 @@
+package Exercise.Day10;
+
+import java.util.Scanner;
+
+public class MultiplicationTable {
+    public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        int number1 = scn.nextInt();
+        int number2 = scn.nextInt();
+        int[][] matrix = new int[number1][number2];
+        int i = 0;
+        for (int j = 0; j < number2; j++) {
+            if (i < number1) {
+                matrix[i][j] = i * j;
+            } else {
+                break;
+            }
+            if (j == number2 - 1) {
+                j = 0;
+                i++;
+            }
+        }
+        for (i = 0; i < number1; i++) {
+            for (int j = 0; j < number2; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println("\n");
+        }
+    }
+}
