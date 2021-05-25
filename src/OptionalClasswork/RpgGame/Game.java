@@ -43,7 +43,7 @@ public class Game {
     public static Character GameCreateOpponent() {
         System.out.println("Please choose npc profession");
         System.out.println("1 - Warrior");
-        System.out.println("2 - Archer");
+        System.out.println("2 - Assassin");
         System.out.println("3 - Mage");
         Scanner scn = new Scanner(System.in);
         int choice = scn.nextInt();
