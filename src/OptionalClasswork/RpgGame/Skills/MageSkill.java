@@ -8,15 +8,12 @@ public class MageSkill extends Skill {
         super(skillDamage, skillName, skillCost, skillCooldown);
     }
 
-    public MageSkill() {
-        super();
-    }
 
     public static MageSkill createSkill(Staff staff) {
         return new MageSkill(200, "Fireball", 50, 3);
     }
 
     public static MageSkill createSkill(WandAndBuckler wandAndBuckler) {
-        return new MageSkill(200, "Magic Heal", 50, 3);
+        return new MageSkill(200, "Magic Armor", 50, 3);
     }
 }

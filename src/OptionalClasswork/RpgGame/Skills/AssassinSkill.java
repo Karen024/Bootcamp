@@ -8,9 +8,6 @@ public class AssassinSkill extends Skill {
         super(skillDamage, skillName, skillCost, skillCooldown);
     }
 
-    public AssassinSkill() {
-        super();
-    }
 
     public static AssassinSkill createSkill(Bow bow) {
         return new AssassinSkill(0, "Triple Shot", 40, 3);

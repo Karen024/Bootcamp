@@ -1,6 +1,5 @@
 package OptionalClasswork.RpgGame.Character;
 
-import OptionalClasswork.RpgGame.Equipment.AssassinEquipment;
 import OptionalClasswork.RpgGame.Equipment.Bow;
 import OptionalClasswork.RpgGame.Equipment.DualDaggers;
 import OptionalClasswork.RpgGame.Skills.AssassinSkill;
@@ -9,10 +8,6 @@ import java.util.Scanner;
 
 public class Assassin extends Character {
 
-
-    public Assassin(String name, int health, int energy, int defense, int damage, AssassinEquipment equipment, AssassinSkill skill) {
-        super(name, health, energy, defense, damage, equipment, skill);
-    }
 
     public Assassin() {
     }
@@ -27,21 +22,23 @@ public class Assassin extends Character {
         setDamage(50);
         setDefense(35);
         System.out.println("Choose your equipment");
-        System.out.println("1 - bow, high damage, medium defense");
-        System.out.println("2 - dual daggers, high damage, low defense");
+        System.out.println("1 - bow, damage boost,energy boost, defense penalty");
+        System.out.println("2 - dual daggers, defense boost, energy boost");
         int choice = scn.nextInt();
+        while (choice != 1 && choice != 2) {
+            System.out.println("Please choose you equipment 1 or 2");
+            choice = scn.nextInt();
+        }
         if (choice == 1) {
             Bow equipment = new Bow();
             equipment.changeStats(this);
             setSkill(AssassinSkill.createSkill(equipment));
             setEquipment(equipment);
-        } else if (choice == 2) {
+        } else {
             DualDaggers equipment = new DualDaggers();
             equipment.changeStats(this);
             setSkill(AssassinSkill.createSkill(equipment));
             setEquipment(equipment);
-        } else {
-            System.out.println("Wrong input, fight naked");
         }
     }
 

@@ -19,26 +19,30 @@ public class Game {
         System.out.println("3 - Mage");
         Scanner scn = new Scanner(System.in);
         int choice = scn.nextInt();
-
+        Character chosenCharacter = null;
+        while (choice != 1 && choice != 2 && choice != 3) {
+            System.out.println("Wrong input try again");
+            choice = scn.nextInt();
+        }
         switch (choice) {
             case 1:
                 Warrior warrior = new Warrior();
                 warrior = Warrior.getCharacter(warrior);
-                return warrior;
+                chosenCharacter = warrior;
+                break;
             case 2:
                 Assassin assassin = new Assassin();
                 assassin = Assassin.getCharacter(assassin);
-                return assassin;
+                chosenCharacter = assassin;
+                break;
             case 3:
                 Mage mage = new Mage();
                 mage = Mage.getCharacter(mage);
-                return mage;
-            default:
-                System.out.println("Wrong input try again");
-                return null;
+                chosenCharacter = mage;
         }
-
+        return chosenCharacter;
     }
+
 
     public static Character GameCreateOpponent() {
         System.out.println("Please choose npc profession");
@@ -47,51 +51,55 @@ public class Game {
         System.out.println("3 - Mage");
         Scanner scn = new Scanner(System.in);
         int choice = scn.nextInt();
+        Character chosenCharacter = null;
+        while (choice != 1 && choice != 2 && choice != 3) {
+            System.out.println("Wrong input try again");
+            choice = scn.nextInt();
+        }
         switch (choice) {
             case 1:
                 Warrior warrior = new Warrior();
                 warrior = Warrior.getCharacter(warrior);
-                return warrior;
+                chosenCharacter = warrior;
+                break;
             case 2:
                 Assassin assassin = new Assassin();
                 assassin = Assassin.getCharacter(assassin);
-                return assassin;
+                chosenCharacter = assassin;
+                break;
             case 3:
                 Mage mage = new Mage();
                 mage = Mage.getCharacter(mage);
-                return mage;
-            default:
-                System.out.println("Wrong input try again");
-                return null;
-        }
+                chosenCharacter = mage;
 
+        }
+        return chosenCharacter;
     }
 
     public void startGame() {
         player = GameCreateCharacter();
         npc = GameCreateOpponent();
+        printCharactersInfo();
         System.out.println();
-        System.out.println(player.toString());
-        System.out.println(npc.toString());
-        System.out.println();
-        System.out.println(player.getSkill().toString());
-        System.out.println(npc.getSkill().toString());
         System.out.println("To start roll the dice (to decide first attacker) by typing roll");
         Scanner scn = new Scanner(System.in);
         String answer = scn.next();
-        if (answer.equals("roll")) {
-            Random rnd = new Random();
-            boolean first = playerFirstOrNotWithDice();
-            if (first) {
-                startBattleWithPlayer();
-            } else {
-                startBattleWithNpc();
-            }
+        while (!answer.equals("roll")) {
+            System.out.println("Wrong input pls type roll");
+            answer = scn.next();
         }
+        Random rnd = new Random();
+        boolean first = playerFirstOrNotWithDice();
+        if (first) {
+            startBattle(player, npc);
+        } else {
+            startBattle(npc, player);
+        }
+
     }
 
     //start game from player
-    public void startBattleWithPlayer() {
+    public void startBattle(Character player, Character npc) {
         boolean round = false;
         Random rnd = new Random();
         int playerSkillCooldown = 0;
@@ -109,9 +117,7 @@ public class Game {
                 }
                 if (criticalReadyPlayer) {
                     attackCritical(player, npc);
-                    System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                    System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                    System.out.println();
+                    printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
                     criticalReadyPlayer = false;
                     round = true;
                     continue;
@@ -125,9 +131,7 @@ public class Game {
                             criticalReadyPlayer = true;
                         }
                         playerSkillCooldown = useSkill(player, npc);
-                        System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                        System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                        System.out.println();
+                        printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
                         round = true;
                         continue;
                     }
@@ -135,9 +139,7 @@ public class Game {
                     playerSkillCooldown--;
                 }
                 attack(player, npc);
-                System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                System.out.println();
+                printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
                 round = true;
             } else {
                 if (stunCountNpc) {
@@ -147,9 +149,7 @@ public class Game {
                 }
                 if (criticalReadyNpc) {
                     attackCritical(npc, player);
-                    System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                    System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                    System.out.println();
+                    printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
                     criticalReadyNpc = false;
                     round = false;
                     continue;
@@ -163,9 +163,7 @@ public class Game {
                             criticalReadyNpc = true;
                         }
                         npcSkillCooldown = useSkill(npc, player);
-                        System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                        System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                        System.out.println();
+                        printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
                         round = false;
                         continue;
                     }
@@ -173,110 +171,7 @@ public class Game {
                     npcSkillCooldown--;
                 }
                 attack(npc, player);
-                System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                System.out.println();
-                round = false;
-            }
-        }
-        if (player.getHealth() <= 0 && npc.getHealth() <= 0) {
-            System.out.println("Draw");
-            return;
-        } else if (player.getHealth() <= 0) {
-            System.out.println(npc.getName() + " won the game");
-            return;
-        } else if (npc.getHealth() <= 0) {
-            System.out.println(player.getName() + " won the game");
-            return;
-        }
-    }
-
-    //start game from npc
-    public void startBattleWithNpc() {
-        boolean round = false;
-        Random rnd = new Random();
-        int playerSkillCooldown = 0;
-        int npcSkillCooldown = 0;
-        boolean stunCountPlayer = false;
-        boolean stunCountNpc = false;
-        boolean criticalReadyPlayer = false;
-        boolean criticalReadyNpc = false;
-        while (player.getHealth() >= 0 && npc.getHealth() >= 0) {
-            if (round == false) {
-                if (stunCountNpc) {
-                    stunCountNpc = true;
-                    round = true;
-                    continue;
-                }
-                if (criticalReadyNpc) {
-                    attackCritical(npc, player);
-                    System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                    System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                    System.out.println();
-                    criticalReadyNpc = false;
-                    round = true;
-                    continue;
-                }
-                if (rnd.nextBoolean() == true && npcSkillCooldown <= 0) {
-                    if (npc.getEnergy() > 0) {
-                        if (npc.getSkill().getSkillName() == "Stun") {
-                            stunCountPlayer = true;
-                        }
-                        if (npc.getSkill().getSkillName() == "Prepare Critical") {
-                            criticalReadyNpc = true;
-                        }
-                        npcSkillCooldown = useSkill(npc, player);
-                        System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                        System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                        System.out.println();
-                        round = true;
-                        continue;
-                    }
-                } else if (npcSkillCooldown > 0) {
-                    npcSkillCooldown--;
-                }
-                attack(npc, player);
-                System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                System.out.println();
-                round = true;
-            } else {
-                if (stunCountPlayer) {
-                    stunCountPlayer = false;
-                    round = false;
-                    continue;
-                }
-                if (criticalReadyPlayer) {
-                    attackCritical(player, npc);
-                    System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                    System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                    System.out.println();
-                    criticalReadyPlayer = false;
-                    round = false;
-                    continue;
-                }
-                if (rnd.nextBoolean() == true && playerSkillCooldown <= 0) {
-                    if (player.getEnergy() > 0) {
-                        if (player.getSkill().getSkillName() == "Stun") {
-                            stunCountNpc = true;
-                        }
-                        if (player.getSkill().getSkillName() == "Prepare Critical") {
-                            criticalReadyPlayer = true;
-                        }
-                        playerSkillCooldown = useSkill(player, npc);
-                        System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                        System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                        System.out.println();
-                        round = false;
-                        continue;
-                    }
-                } else if (playerSkillCooldown > 0) {
-                    playerSkillCooldown--;
-                }
-                attack(player, npc);
-                System.out.println(player.getName() + " health = " + player.getHealth() + ", " + npc.getName() + " health = " + npc.getHealth());
-                System.out.println(player.getName() + " skill cooldown = " + playerSkillCooldown + " ,npc skill cooldown = " + npcSkillCooldown);
-                System.out.println();
+                printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
                 round = false;
             }
         }
@@ -306,7 +201,6 @@ public class Game {
         player2.setHealth(player2.getHealth() - damageReceivedByPlayer2FromPlayer1);
     }
 
-
     public boolean playerFirstOrNotWithDice() {
         Random rnd = new Random();
         int dicePlayer = rnd.nextInt(6) + 1;
@@ -325,48 +219,49 @@ public class Game {
 
     public int useSkill(Character player1, Character player2) {
         Random rnd = new Random();
+
+        int damage = player1.getSkill().getSkillDamage();
+        int cost = player1.getSkill().getSkillCost();
+        int cooldown = player1.getSkill().getSkillCooldown();
+
         if (player1.getSkill().getSkillName() == "Fireball") {
-            player2.setHealth(player2.getHealth() - player1.getSkill().getSkillDamage());
-            player1.setEnergy(player1.getEnergy() - player1.getSkill().getSkillCost());
-            System.out.println(player1.getName() + " used Fireball skill on " + player2.getName());
-            System.out.println(player1.getName() + " dealt " + player1.getSkill().getSkillDamage() + " damage to " + player2.getName());
-            return player1.getSkill().getSkillCooldown();
-        } else if (player1.getSkill().getSkillName() == "Magic Heal") {
-            int maxHealth = player1.getHealth();
-            if (player1.getHealth() + player1.getSkill().getSkillDamage() > maxHealth) {
-                System.out.println(player1.getName() + " used Magic Heal skill on himself");
-                System.out.println(player1.getName() + " healed by " + (maxHealth - player1.getHealth()) + " points");
-                player1.setHealth(maxHealth);
-            } else {
-                player1.setHealth(player1.getHealth() + player1.getSkill().getSkillDamage());
-                System.out.println(player1.getName() + " used Magic Heal skill on himself");
-                System.out.println(player1.getName() + " healed by " + player1.getSkill().getSkillDamage() + " points");
-            }
-            player1.setEnergy(player1.getEnergy() - player1.getSkill().getSkillCost());
-            return player1.getSkill().getSkillCooldown();
-        } else if (player1.getSkill().getSkillName() == "Slice") {
-            player2.setHealth(player2.getHealth() - player1.getSkill().getSkillDamage());
-            player1.setEnergy(player1.getEnergy() - player1.getSkill().getSkillCost());
-            System.out.println(player1.getName() + " used Slice skill on " + player2.getName());
-            System.out.println(player1.getName() + " dealt " + player1.getSkill().getSkillDamage() + " damage to " + player2.getName());
-            return player1.getSkill().getSkillCooldown();
-        } else if (player1.getSkill().getSkillName() == "Stun") {
-            player2.setHealth(player2.getHealth() - player1.getSkill().getSkillDamage());
-            player1.setEnergy(player1.getEnergy() - player1.getSkill().getSkillCost());
-            System.out.println(player1.getName() + " used Stun skill on " + player2.getName());
-            System.out.println(player1.getName() + " dealt " + player1.getSkill().getSkillDamage() + " damage to " + player2.getName());
-            return player1.getSkill().getSkillCooldown();
-        } else if (player1.getSkill().getSkillName() == "Triple Shot") {
-            int damage = (player1.getDamage() * 3) - (rnd.nextInt(10) + 1) * 3;
             player2.setHealth(player2.getHealth() - damage);
-            player1.setEnergy(player1.getEnergy() - player1.getSkill().getSkillCost());
-            System.out.println(player1.getName() + " used Triple Shot skill on " + player2.getName());
-            System.out.println(player1.getName() + " dealt " + damage + " damage to " + player2.getName());
-            return player1.getSkill().getSkillCooldown();
+            player1.setEnergy(player1.getEnergy() - cost);
+            printSkillUsageInfo("Fireball", player1, player2, damage);
+            return cooldown;
+
+        } else if (player1.getSkill().getSkillName() == "Magic Armor") {
+
+            player1.setHealth(player1.getHealth() + damage);
+            System.out.println(player1.getName() + " used Magic Armor skill on himself");
+            System.out.println(player1.getName() + " healed by " + damage + " points");
+
+            player1.setEnergy(player1.getEnergy() - cost);
+            return cooldown;
+
+        } else if (player1.getSkill().getSkillName() == "Slice") {
+            player2.setHealth(player2.getHealth() - damage);
+            player1.setEnergy(player1.getEnergy() - cost);
+            printSkillUsageInfo("Slice", player1, player2, damage);
+            return cooldown;
+
+        } else if (player1.getSkill().getSkillName() == "Stun") {
+            player2.setHealth(player2.getHealth() - damage);
+            player1.setEnergy(player1.getEnergy() - cost);
+            printSkillUsageInfo("Stun", player1, player2, damage);
+            return cooldown;
+
+        } else if (player1.getSkill().getSkillName() == "Triple Shot") {
+            int tripleDamage = (player1.getDamage() * 3) - (rnd.nextInt(10) + 1) * 3;
+            player2.setHealth(player2.getHealth() - tripleDamage);
+            player1.setEnergy(player1.getEnergy() - cost);
+            printSkillUsageInfo("Triple Shot", player1, player2, tripleDamage);
+            return cooldown;
+
         } else {
-            player1.setEnergy(player1.getEnergy() - player1.getSkill().getSkillCost());
+            player1.setEnergy(player1.getEnergy() - cost);
             System.out.println(player1.getName() + " used Prepare Critical skill on " + player2.getName());
-            return player1.getSkill().getSkillCooldown();
+            return cooldown;
         }
     }
 
@@ -376,5 +271,43 @@ public class Game {
                 "player=" + player +
                 ", npc=" + npc +
                 '}';
+    }
+
+    public void printCharactersInfo() {
+        System.out.println();
+        System.out.println(player.toString());
+        System.out.println(npc.toString());
+        System.out.println();
+        System.out.println(player.getSkill().toString());
+        System.out.println(npc.getSkill().toString());
+    }
+
+    public void printSkillUsageInfo(String string, Character player1, Character player2, int damage) {
+        if (string == "Fireball") {
+            System.out.println(player1.getName() + " used Fireball skill on " + player2.getName());
+            System.out.println(player1.getName() + " dealt " + damage + " damage to " + player2.getName());
+        }
+        if (string == "Slice") {
+            System.out.println(player1.getName() + " used Slice skill on " + player2.getName());
+            System.out.println(player1.getName() + " dealt " + damage + " damage to " + player2.getName());
+        }
+        if (string == "Stun") {
+            System.out.println(player1.getName() + " used Stun skill on " + player2.getName());
+            System.out.println(player1.getName() + " dealt " + damage + " damage to " + player2.getName());
+        }
+        if (string == "Triple Shot") {
+            System.out.println(player1.getName() + " used Triple Shot skill on " + player2.getName());
+            System.out.println(player1.getName() + " dealt " + damage + " damage to " + player2.getName());
+        }
+        if (string == "Magic Heal") {
+            System.out.println(player1.getName() + " used Magic Armor skill on himself");
+            System.out.println(player1.getName() + " healed by " + damage + " points");
+        }
+    }
+
+    public void printInGameInfo(Character player1, Character player2, int player1SkillCooldown, int player2SkillCooldown) {
+        System.out.println(player1.getName() + " health = " + player1.getHealth() + ", " + player2.getName() + " health = " + player2.getHealth());
+        System.out.println(player1.getName() + " skill cooldown = " + player1SkillCooldown + " " + player2.getName() + " skill cooldown = " + player2SkillCooldown);
+        System.out.println();
     }
 }

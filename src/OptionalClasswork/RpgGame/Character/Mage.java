@@ -1,6 +1,5 @@
 package OptionalClasswork.RpgGame.Character;
 
-import OptionalClasswork.RpgGame.Equipment.MageEquipment;
 import OptionalClasswork.RpgGame.Equipment.Staff;
 import OptionalClasswork.RpgGame.Equipment.WandAndBuckler;
 import OptionalClasswork.RpgGame.Skills.MageSkill;
@@ -9,9 +8,6 @@ import java.util.Scanner;
 
 public class Mage extends Character {
 
-    public Mage(String name, int health, int energy, int defense, int damage, MageEquipment equipment, MageSkill skill) {
-        super(name, health, energy, defense, damage, equipment, skill);
-    }
 
     public Mage() {
     }
@@ -26,21 +22,23 @@ public class Mage extends Character {
         setDamage(50);
         setDefense(25);
         System.out.println("Choose your equipment");
-        System.out.println("1 - staff, high damage, medium defense");
-        System.out.println("2 - wand and buckler, high damage, low defense");
+        System.out.println("1 - staff, energy boost, damage boost");
+        System.out.println("2 - wand and buckler, energy boost, defense boost,damage boost");
         int choice = scn.nextInt();
+        while (choice != 1 && choice != 2) {
+            System.out.println("Please choose you equipment 1 or 2");
+            choice = scn.nextInt();
+        }
         if (choice == 1) {
             Staff equipment = new Staff();
             equipment.changeStats(this);
             setSkill(MageSkill.createSkill(equipment));
             setEquipment(equipment);
-        } else if (choice == 2) {
+        } else {
             WandAndBuckler equipment = new WandAndBuckler();
             equipment.changeStats(this);
             setSkill(MageSkill.createSkill(equipment));
             setEquipment(equipment);
-        } else {
-            System.out.println("Wrong input, fight naked");
         }
     }
 
