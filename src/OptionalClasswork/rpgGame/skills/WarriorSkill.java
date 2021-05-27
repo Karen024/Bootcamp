@@ -1,13 +1,13 @@
-package OptionalClasswork.RpgGame.Skills;
+package OptionalClasswork.rpgGame.skills;
 
-import OptionalClasswork.RpgGame.Equipment.GreatSword;
-import OptionalClasswork.RpgGame.Equipment.SwordAndShield;
+import OptionalClasswork.rpgGame.equipment.GreatSword;
+import OptionalClasswork.rpgGame.equipment.SwordAndShield;
 
 public class WarriorSkill extends Skill {
     private WarriorSkill(int skillDamage, String skillName, int skillCost, int skillCooldown) {
         super(skillDamage, skillName, skillCost, skillCooldown);
     }
-    
+
 
     public static WarriorSkill createSkill(GreatSword greatSword) {
         return new WarriorSkill(100, "Slice", 50, 2);

@@ -1,8 +1,8 @@
-package OptionalClasswork.RpgGame.Character;
+package OptionalClasswork.rpgGame.character;
 
 
-import OptionalClasswork.RpgGame.Equipment.Equipment;
-import OptionalClasswork.RpgGame.Skills.Skill;
+import OptionalClasswork.rpgGame.equipment.Equipment;
+import OptionalClasswork.rpgGame.skills.Skill;
 
 public abstract class Character {
     private String name;
@@ -10,15 +10,22 @@ public abstract class Character {
     private int energy;
     private int defense;
     private int damage;
+    private boolean stunState;
     private Skill skill;
     private Equipment equipment;
+
+    public abstract void receiveDamage(int damage);
+
+    public abstract int useSkill(Character character,int coolDown);
+
+    public abstract void attack(Character character);
 
     public abstract void setCharacter();
 
     public Character() {
     }
 
-    public Character(String name, int health, int energy, int defense, int damage, Equipment equipment,Skill skill) {
+    public Character(String name, int health, int energy, int defense, int damage, boolean stunState, Equipment equipment, Skill skill) {
         this.name = name;
         this.health = health;
         this.energy = energy;
@@ -82,6 +89,14 @@ public abstract class Character {
 
     public void setSkill(Skill skill) {
         this.skill = skill;
+    }
+
+    public boolean isStunState() {
+        return stunState;
+    }
+
+    public void setStunState(boolean stunState) {
+        this.stunState = stunState;
     }
 
     @Override

@@ -1,6 +1,6 @@
-package OptionalClasswork.RpgGame.Equipment;
+package OptionalClasswork.rpgGame.equipment;
 
-import OptionalClasswork.RpgGame.Character.Assassin;
+import OptionalClasswork.rpgGame.character.Assassin;
 
 public class Bow extends AssassinEquipment {
     private int damageBoost;

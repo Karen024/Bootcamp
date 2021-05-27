@@ -1,6 +1,6 @@
-package OptionalClasswork.RpgGame.Equipment;
+package OptionalClasswork.rpgGame.equipment;
 
-import OptionalClasswork.RpgGame.Character.Warrior;
+import OptionalClasswork.rpgGame.character.Warrior;
 
 public class GreatSword extends WarriorEquipment {
     private int damageBoost;

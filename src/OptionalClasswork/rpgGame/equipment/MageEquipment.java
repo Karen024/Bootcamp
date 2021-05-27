@@ -1,6 +1,6 @@
-package OptionalClasswork.RpgGame.Equipment;
+package OptionalClasswork.rpgGame.equipment;
 
-import OptionalClasswork.RpgGame.Character.Mage;
+import OptionalClasswork.rpgGame.character.Mage;
 
 public abstract class MageEquipment extends Equipment{
     public abstract void changeStats(Mage mage);

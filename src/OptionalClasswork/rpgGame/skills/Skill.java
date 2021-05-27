@@ -1,4 +1,4 @@
-package OptionalClasswork.RpgGame.Skills;
+package OptionalClasswork.rpgGame.skills;
 
 public abstract class Skill {
     private int skillDamage;

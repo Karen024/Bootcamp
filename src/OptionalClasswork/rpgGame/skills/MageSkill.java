@@ -1,7 +1,7 @@
-package OptionalClasswork.RpgGame.Skills;
+package OptionalClasswork.rpgGame.skills;
 
-import OptionalClasswork.RpgGame.Equipment.Staff;
-import OptionalClasswork.RpgGame.Equipment.WandAndBuckler;
+import OptionalClasswork.rpgGame.equipment.Staff;
+import OptionalClasswork.rpgGame.equipment.WandAndBuckler;
 
 public class MageSkill extends Skill {
     private MageSkill(int skillDamage, String skillName, int skillCost, int skillCooldown) {
@@ -14,6 +14,6 @@ public class MageSkill extends Skill {
     }
 
     public static MageSkill createSkill(WandAndBuckler wandAndBuckler) {
-        return new MageSkill(200, "Magic Armor", 50, 3);
+        return new MageSkill(200, "Magic Shield", 50, 3);
     }
 }

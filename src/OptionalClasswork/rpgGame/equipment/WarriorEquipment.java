@@ -1,6 +1,6 @@
-package OptionalClasswork.RpgGame.Equipment;
+package OptionalClasswork.rpgGame.equipment;
 
-import OptionalClasswork.RpgGame.Character.Warrior;
+import OptionalClasswork.rpgGame.character.Warrior;
 
 public abstract class WarriorEquipment  extends  Equipment{
     public abstract void changeStats(Warrior warrior);

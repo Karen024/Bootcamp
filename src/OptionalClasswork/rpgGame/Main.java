@@ -1,4 +1,4 @@
-package OptionalClasswork.RpgGame;
+package OptionalClasswork.rpgGame;
 
 public class Main {
     public static void main(String[] args) {

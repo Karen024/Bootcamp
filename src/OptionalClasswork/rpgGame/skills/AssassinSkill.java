@@ -1,7 +1,7 @@
-package OptionalClasswork.RpgGame.Skills;
+package OptionalClasswork.rpgGame.skills;
 
-import OptionalClasswork.RpgGame.Equipment.Bow;
-import OptionalClasswork.RpgGame.Equipment.DualDaggers;
+import OptionalClasswork.rpgGame.equipment.Bow;
+import OptionalClasswork.rpgGame.equipment.DualDaggers;
 
 public class AssassinSkill extends Skill {
     private AssassinSkill(int skillDamage, String skillName, int skillCost, int skillCooldown) {

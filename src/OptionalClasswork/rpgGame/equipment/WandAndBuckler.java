@@ -1,6 +1,6 @@
-package OptionalClasswork.RpgGame.Equipment;
+package OptionalClasswork.rpgGame.equipment;
 
-import OptionalClasswork.RpgGame.Character.Mage;
+import OptionalClasswork.rpgGame.character.Mage;
 
 public class WandAndBuckler extends MageEquipment {
     private int energyPenalty;
