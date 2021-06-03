@@ -112,7 +112,9 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void copyArrayList(MyArrayList<T> fromArray, MyArrayList<T> toArray) {
-        notEnoughSpaceCheck(fromArray, toArray);
+        if (notEnoughSpaceCheck(fromArray, toArray)) {
+            return;
+        }
         for (int i = 0; i < fromArray.size(); i++) {
             toArray.add(fromArray.get(i));
         }
@@ -129,18 +131,19 @@ public class MyArrayList<T> implements List<T> {
         return newArray;
     }
 
-
     public int length() {
         return lastIndex + 1;
     }
 
-    private void notEnoughSpaceCheck(MyArrayList<T> fromArray, MyArrayList<T> toArray) {
+    private boolean notEnoughSpaceCheck(MyArrayList<T> fromArray, MyArrayList<T> toArray) {
         try {
             if (toArray.length() < fromArray.length()) {
                 throw new MyNotEnoughSpaceException();
             }
+            return true;
         } catch (MyNotEnoughSpaceException e) {
             e.printMessage();
+            return false;
         }
     }
 
@@ -158,6 +161,10 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void swapInArray(T object1, T object2) {
+        if (!this.contains(object1) || !this.contains(object2)) {
+            System.out.println("No such elements");
+            return;
+        }
         int index1 = indexOf(object1);
         int index2 = indexOf(object2);
         T temp = array[index1];

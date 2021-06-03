@@ -1,6 +1,10 @@
 package OptionalClasswork.lists.doubleLinkedlist;
 
-public class MyDoubleLinkedList<T> implements List {
+import OptionalClasswork.lists.arrayList.MyArrayList;
+
+import java.util.Objects;
+
+public class MyDoubleLinkedList<T> implements List<T> {
 
     MyNode<T> first;
     MyNode<T> last;
@@ -103,7 +107,7 @@ public class MyDoubleLinkedList<T> implements List {
     }
 
     @Override
-    public void add(Object obj) {
+    public void add(T obj) {
         MyNode<T> newNode = new MyNode<T>((T) obj);
         if (ifNoFirstCreate(newNode)) return;
         if (ifNoLastCreate(newNode)) return;
@@ -133,6 +137,92 @@ public class MyDoubleLinkedList<T> implements List {
             return true;
         }
         return false;
+    }
+
+    public void removeAll(T obj) {
+        int number = elementCountInList(obj);
+        for (int i = 0; i < number; i++) {
+            remove(obj);
+        }
+    }
+
+    public void swapElements(T obj1, T obj2) {
+        if (!this.contains(obj1) || !this.contains(obj2)) {
+            System.out.println("There is non existing obj in list");
+            return;
+        }
+        MyNode<T> current1 = first;
+        MyNode<T> current2 = first;
+        for (int i = 0; i < this.size(); i++) {
+            if (current1.getData() == obj1) {
+                continue;
+            }
+            current1 = current1.next;
+        }
+        for (int i = 0; i < this.size(); i++) {
+            if (current2.getData() == obj2) {
+                continue;
+            }
+            current2 = current2.next;
+        }
+        T temp = current1.getData();
+        current1.setData(current2.getData());
+        current2.setData(temp);
+    }
+
+    public void joinTwoLists(MyDoubleLinkedList<T> list) {
+        if (isEmpty()) {
+            System.out.println("List is empty to join");
+            return;
+        }
+        this.last.connectToNodeForward(list.first);
+        list.first.connectToNodePrevious(this.last);
+        list.last.connectToNodeForward(this.first);
+        this.first.connectToNodePrevious(list.last);
+    }
+
+    private boolean isEmpty() {
+        if (first == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public void clone(MyDoubleLinkedList<T> list2) {
+        if (notEqualSpaceCheck(list2)) {
+            return;
+        }
+        MyNode<T> currentList1 = this.first;
+        MyNode<T> currentList2 = list2.first;
+        for (int i = 0; i < this.size(); i++) {
+            currentList1.setData(currentList2.getData());
+            currentList1 = currentList1.next;
+            currentList2 = currentList2.next;
+        }
+    }
+
+    private boolean notEqualSpaceCheck(MyDoubleLinkedList<T> list2) {
+        try {
+            if (this.size() != list2.size()) {
+                throw new MyNotEqualSpaceException();
+            }
+            return true;
+        } catch (MyNotEqualSpaceException e) {
+            e.printMessage();
+            return false;
+        }
+    }
+
+    private int elementCountInList(T obj) {
+        MyNode<T> current = first;
+        int count = 0;
+        for (int i = 0; i < size(); i++) {
+            if (current.getData() == obj) {
+                count++;
+            }
+            current = current.next;
+        }
+        return count;
     }
 
     @Override
@@ -174,7 +264,7 @@ public class MyDoubleLinkedList<T> implements List {
     }
 
     @Override
-    public void remove(Object obj) {
+    public void remove(T obj) {
         if (first.getData() == obj) {
             first = first.getNext();
             first.setLast(null);
@@ -204,7 +294,7 @@ public class MyDoubleLinkedList<T> implements List {
     }
 
     @Override
-    public boolean contains(Object obj) {
+    public boolean contains(T obj) {
         if (first.getData().equals(obj)) {
             return true;
         }
@@ -241,5 +331,34 @@ public class MyDoubleLinkedList<T> implements List {
         }
         result.append("]");
         return result.toString();
+    }
+
+    public MyArrayList<T> linkedListToArrayList() {
+        MyArrayList<T> arrayList = new MyArrayList<>();
+        MyNode<T> current = this.first;
+        for (int i = 0; i < this.size(); i++) {
+            arrayList.add(current.getData());
+            current = current.next;
+        }
+        return arrayList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MyDoubleLinkedList)) return false;
+        MyDoubleLinkedList<?> that = (MyDoubleLinkedList<?>) o;
+        return size == that.size &&
+                first.equals(that.first) &&
+                last.equals(that.last);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(first, last, size);
+    }
+
+    public T getLast() {
+        return last.data;
     }
 }

@@ -1,20 +1,25 @@
 package OptionalClasswork.lists;
 
+import OptionalClasswork.lists.arrayList.MyArrayList;
 import OptionalClasswork.lists.doubleLinkedlist.MyDoubleLinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        MyDoubleLinkedList<Integer> linkedList = new MyDoubleLinkedList<>();
-        for (int i = 1; i < 15; i++) {
-            if (i == 7) {
-                linkedList.add(null);
-                continue;
-            }
-            linkedList.add(i);
+        MyDoubleLinkedList<Integer> list = new MyDoubleLinkedList<>();
+
+        for (int i = 0; i < 5; i++) {
+            list.add(i);
         }
-        System.out.println(linkedList.toString());
-        System.out.println(linkedList.get(6));
-        boolean check = linkedList.contains(null);
-        System.out.println(check);
+
+        MyDoubleLinkedList<Integer> list2 = new MyDoubleLinkedList<>();
+        for (int i = 10; i < 16; i++) {
+            list2.add(i);
+        }
+        System.out.println(list.toString());
+        list.clone(list2);
+        System.out.println(list.toString());
+        MyArrayList<Integer> arrayList;
+        arrayList = list.linkedListToArrayList();
+        System.out.println(arrayList.toString());
     }
 }
