@@ -1,25 +1,23 @@
 package OptionalClasswork.lists;
 
-import OptionalClasswork.lists.arrayList.MyArrayList;
 import OptionalClasswork.lists.doubleLinkedlist.MyDoubleLinkedList;
+import OptionalClasswork.lists.doubleLinkedlist.interfaces.Deque;
 
 public class Main {
     public static void main(String[] args) {
-        MyDoubleLinkedList<Integer> list = new MyDoubleLinkedList<>();
-
-        for (int i = 0; i < 5; i++) {
-            list.add(i);
-        }
-
-        MyDoubleLinkedList<Integer> list2 = new MyDoubleLinkedList<>();
-        for (int i = 10; i < 16; i++) {
-            list2.add(i);
-        }
-        System.out.println(list.toString());
-        list.clone(list2);
-        System.out.println(list.toString());
-        MyArrayList<Integer> arrayList;
-        arrayList = list.linkedListToArrayList();
-        System.out.println(arrayList.toString());
+        Deque<Integer> list1 = new MyDoubleLinkedList<>();
+        Deque<Integer> list2 = new MyDoubleLinkedList<>();
+        list1.addDeque(9);
+        list1.addDeque(9);
+        list1.addDeque(8);
+        list1.addDeque(9);
+        list1.addDeque(9);
+        list2.addDeque(35);
+        list2.addDeque(40);
+        list2.addDeque(45);
+        list2.addDeque(50);
+        System.out.println(list1.toString());
+        list1.addAll((MyDoubleLinkedList<Integer>) list2);
+        System.out.println(list1.toString());
     }
 }

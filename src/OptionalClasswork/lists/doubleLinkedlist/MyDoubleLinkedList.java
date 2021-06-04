@@ -1,10 +1,13 @@
 package OptionalClasswork.lists.doubleLinkedlist;
 
-import OptionalClasswork.lists.arrayList.MyArrayList;
+import OptionalClasswork.lists.doubleLinkedlist.interfaces.Deque;
+import OptionalClasswork.lists.doubleLinkedlist.interfaces.List;
 
 import java.util.Objects;
 
-public class MyDoubleLinkedList<T> implements List<T> {
+public class MyDoubleLinkedList<T> implements List<T>, Deque<T> {
+
+    //DOUBLE LINKED LIST METHODS
 
     MyNode<T> first;
     MyNode<T> last;
@@ -76,7 +79,7 @@ public class MyDoubleLinkedList<T> implements List<T> {
 
     private boolean indexInputCheck(int index) {
         try {
-            if (index < 0) {
+            if (index < 0 || index >= this.size()) {
                 throw new MyIndexOutOfBoundsException();
             }
         } catch (MyIndexOutOfBoundsException e) {
@@ -171,14 +174,19 @@ public class MyDoubleLinkedList<T> implements List<T> {
     }
 
     public void joinTwoLists(MyDoubleLinkedList<T> list) {
-        if (isEmpty()) {
+        if (list.isEmpty() || isEmpty()) {
             System.out.println("List is empty to join");
             return;
         }
         this.last.connectToNodeForward(list.first);
-        list.first.connectToNodePrevious(this.last);
+        list.last.connectToNodePrevious(this.last);
         list.last.connectToNodeForward(this.first);
         this.first.connectToNodePrevious(list.last);
+        last = list.last;
+        list.first = first;
+        int temp = this.size;
+        this.size += list.size;
+        list.size += temp;
     }
 
     private boolean isEmpty() {
@@ -194,23 +202,23 @@ public class MyDoubleLinkedList<T> implements List<T> {
         }
         MyNode<T> currentList1 = this.first;
         MyNode<T> currentList2 = list2.first;
-        for (int i = 0; i < this.size(); i++) {
+        for (int i = 0; i < list2.size(); i++) {
             currentList1.setData(currentList2.getData());
-            currentList1 = currentList1.next;
-            currentList2 = currentList2.next;
+            currentList1 = currentList1.getNext();
+            currentList2 = currentList2.getNext();
         }
     }
 
     private boolean notEqualSpaceCheck(MyDoubleLinkedList<T> list2) {
         try {
-            if (this.size() != list2.size()) {
+            if (this.size() < list2.size()) {
                 throw new MyNotEqualSpaceException();
             }
-            return true;
         } catch (MyNotEqualSpaceException e) {
             e.printMessage();
-            return false;
+            return true;
         }
+        return false;
     }
 
     private int elementCountInList(T obj) {
@@ -240,6 +248,7 @@ public class MyDoubleLinkedList<T> implements List<T> {
 
         current.getLast().connectToNodeForward(current.getNext());
         current.getNext().setLast(current.getLast());
+        current.connectToNodes(null, null);
         size--;
     }
 
@@ -277,6 +286,7 @@ public class MyDoubleLinkedList<T> implements List<T> {
             if (current.getData() == obj) {
                 current.getLast().connectToNodeForward(current.getNext());
                 current.getNext().setLast(current.getLast());
+                current.connectToNodes(null, null);
                 size--;
                 return;
             }
@@ -295,7 +305,7 @@ public class MyDoubleLinkedList<T> implements List<T> {
 
     @Override
     public boolean contains(T obj) {
-        if (first.getData().equals(obj)) {
+        if (first.getData() == obj) {
             return true;
         }
         MyNode<T> current = first;
@@ -315,32 +325,140 @@ public class MyDoubleLinkedList<T> implements List<T> {
         return size;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder("[");
-        MyNode<T> current = first;
-        for (int i = 0; i < size; i++) {
-            if (current == null) {
-                break;
-            }
-            result.append(current.getData());
-            if (i < size - 1) {
-                result.append(", ");
-            }
-            current = current.getNext();
+    //DEQUE METHODS
+
+    public void addDeque(T t) {
+        MyNode<T> node = new MyNode<>(t);
+        if (ifNoFirstCreate(node)) {
+            return;
         }
-        result.append("]");
-        return result.toString();
+        if (ifNoLastCreate(node)) {
+            return;
+        }
+        addLast(t);
     }
 
-    public MyArrayList<T> linkedListToArrayList() {
-        MyArrayList<T> arrayList = new MyArrayList<>();
-        MyNode<T> current = this.first;
-        for (int i = 0; i < this.size(); i++) {
-            arrayList.add(current.getData());
-            current = current.next;
+    @Override
+    public void addFirst(T t) {
+        if (isEmpty()) {
+            return;
         }
-        return arrayList;
+        MyNode<T> node = new MyNode<>(t);
+        node.connectToNodes(null, first);
+        first.connectToNodePrevious(node);
+        first = node;
+        size++;
+    }
+
+    @Override
+    public void addLast(T t) {
+        if (isEmpty()) {
+            return;
+        }
+        MyNode<T> node = new MyNode<>(t);
+        node.connectToNodes(last, null);
+        last.connectToNodeForward(node);
+        last = node;
+        size++;
+    }
+
+    @Override
+    public T getFirst() {
+        if (size == 0) {
+        }
+        return first.getData();
+    }
+
+    @Override
+    public T getLast() {
+        if (size == 0) {
+        }
+        return last.getData();
+    }
+
+    @Override
+    public void removeFirst() {
+        if (size == 0) {
+            return;
+        }
+        if (size == 1) {
+            first = null;
+            size--;
+        }
+        first.getNext().connectToNodePrevious(null);
+        first = first.getNext();
+        size--;
+    }
+
+    @Override
+    public void removeLast() {
+        if (size == 0) {
+            return;
+        }
+        if (size == 1) {
+            first = null;
+            size--;
+        }
+        last.getLast().connectToNodeForward(null);
+        last = last.getLast();
+        size--;
+    }
+
+    @Override
+    public void removeFirstOccurrence(T t) {
+        MyNode<T> current;
+        for (current = first; current != null; current = current.getNext()) {
+            if (current.getData() == t) {
+                removeDequeElement(current);
+                return;
+            }
+        }
+    }
+
+    public void removeDequeElement(MyNode<T> node) {
+        if (node == last) {
+            node.getLast().connectToNodeForward(null);
+            last = node.getLast();
+            node.connectToNodes(null, null);
+            size--;
+            return;
+        }
+        if (node == first) {
+            node.getNext().connectToNodePrevious(null);
+            first = node.getNext();
+            node.connectToNodes(null, null);
+            size--;
+            return;
+        }
+        node.getLast().connectToNodeForward(node.getNext());
+        node.getNext().connectToNodePrevious(node.getLast());
+        node.connectToNodes(null, null);
+        size--;
+
+    }
+
+    @Override
+    public void removeLastOccurrence(T t) {
+
+        MyNode<T> current = last;
+        for (current = last; current != null; current = current.getLast()) {
+            if (current.getData() == t) {
+                removeDequeElement(current);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public boolean addAll(MyDoubleLinkedList<T> list2) {
+        if (notEqualSpaceCheck(list2)) {
+            return false;
+        }
+        MyNode<T> currentList2;
+        for (currentList2 = list2.first; currentList2 != null; currentList2 = currentList2.getNext()) {
+            addDeque(currentList2.getData());
+        }
+        return true;
     }
 
     @Override
@@ -358,7 +476,18 @@ public class MyDoubleLinkedList<T> implements List<T> {
         return Objects.hash(first, last, size);
     }
 
-    public T getLast() {
-        return last.data;
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[");
+        MyNode<T> current = first;
+        for (int i = 0; i < size; i++) {
+            result.append(current.getData());
+            if (i < size - 1) {
+                result.append(", ");
+            }
+            current = current.getNext();
+        }
+        result.append("]");
+        return result.toString();
     }
 }
