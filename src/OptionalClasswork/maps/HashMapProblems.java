@@ -2,7 +2,7 @@ package OptionalClasswork.maps;
 
 import java.util.*;
 
-public class HashMapProblems<K, V,T> {
+public class HashMapProblems<K, V, T> {
     public Map<K, V> copy(Map<K, V> map2) {
         Map<K, V> hashMap = new HashMap<>();
         hashMap.putAll(map2);
@@ -96,26 +96,116 @@ public class HashMapProblems<K, V,T> {
         return leastKey;
     }
 
-    public void sortingProblem(List<Integer> array)
-    {
+    public List<Integer> sortingProblem(List<Integer> array) {
         Collections.sort(array);
         Iterator<Integer> iterator = array.iterator();
-        TreeMap<Integer,Integer> treeMap = new TreeMap<>();
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
         Integer countOfNumber = 0;
         Integer currentNumber = array.get(0);
-        while(iterator.hasNext())
-        {
-            Integer current = iterator.next();
-            if(current == currentNumber)
-            {
-                countOfNumber++;
+        listToTreeMap(iterator, treeMap, countOfNumber, currentNumber);
+        treeMap = sortByValues(treeMap);
+        array.clear();
+        return treeMapToArray(treeMap, array);
+    }
+
+    private void listToTreeMap(Iterator<Integer> iterator, TreeMap<Integer, Integer> treeMap, Integer countOfNumber, Integer currentNumber) {
+        while (true) {
+            if (!iterator.hasNext()) {
+                treeMap.put(currentNumber, countOfNumber);
+                break;
             }
-            else
-            {
-                treeMap.put(currentNumber,countOfNumber);
+            Integer current = iterator.next();
+            if (current == currentNumber) {
+                countOfNumber++;
+            } else {
+                treeMap.put(currentNumber, countOfNumber);
                 currentNumber = current;
+                countOfNumber = 1;
             }
         }
-        System.out.println(treeMap.toString());
+    }
+
+    private TreeMap<Integer, Integer> sortByValues(Map<Integer, Integer> map) {
+        Comparator<Integer> comparator = new Comparator<Integer>() {
+
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                int result = map.get(o1).compareTo(map.get(o2));
+                if (result == 0) {
+                    return 1;
+                } else {
+                    return result;
+                }
+            }
+        };
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>(comparator);
+        treeMap.putAll(map);
+        return treeMap;
+    }
+
+    private List<Integer> treeMapToArray(TreeMap<Integer, Integer> map, List<Integer> array) {
+        Object count;
+        int index = 0;
+        Object[] values = map.values().toArray();
+        Iterator<Integer> iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            Integer key = iterator.next();
+            count = values[index];
+            for (Integer i = (Integer) count; i != 0; i--) {
+                array.add(key);
+            }
+            index++;
+        }
+        return array;
+    }
+
+    public  String commerceProblem(List<String> stringList) {
+        Collections.sort(stringList);
+        TreeMap<String, Integer> treeMap = new TreeMap<>(Collections.reverseOrder());
+        String currentString = stringList.get(0);
+        Integer countOfString = 0;
+        Iterator<String> iterator = stringList.iterator();
+        stringListToTreeMap(treeMap, currentString, countOfString, iterator);
+        return featuredOfDay(treeMap);
+    }
+
+    private static void stringListToTreeMap(TreeMap<String, Integer> treeMap, String currentString, Integer countOfString, Iterator<String> iterator) {
+        while (true) {
+            if (!iterator.hasNext()) {
+                treeMap.put(currentString, countOfString);
+                break;
+            }
+            String current = iterator.next();
+            if (current.equals(currentString)) {
+                countOfString++;
+            } else {
+                treeMap.put(currentString, countOfString);
+                currentString = current;
+                countOfString = 1;
+            }
+        }
+    }
+
+    private Integer maxValue(TreeMap<String, Integer> treeMap) {
+        Object[] array = treeMap.values().toArray();
+        Integer maxValue = 0;
+        for (int i = 0; i < array.length; i++) {
+            if ((Integer) array[i] > maxValue) {
+                maxValue = (Integer) array[i];
+            }
+        }
+        return maxValue;
+    }
+
+    private String featuredOfDay(TreeMap<String, Integer> treeMap) {
+        Integer maxValue = maxValue(treeMap);
+        Iterator<Map.Entry<String, Integer>> iterator = treeMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Integer> current = iterator.next();
+            if (current.getValue() == maxValue) {
+                return current.getKey();
+            }
+        }
+        return null;
     }
 }
