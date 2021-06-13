@@ -79,7 +79,7 @@ public class MyDoubleLinkedList<T> implements List<T>, Deque<T> {
 
     private boolean indexInputCheck(int index) {
         try {
-            if (index < 0 || index >= this.size()) {
+            if (index < 0) {
                 throw new MyIndexOutOfBoundsException();
             }
         } catch (MyIndexOutOfBoundsException e) {
@@ -174,7 +174,7 @@ public class MyDoubleLinkedList<T> implements List<T>, Deque<T> {
     }
 
     public void joinTwoLists(MyDoubleLinkedList<T> list) {
-        if (list.isEmpty() || isEmpty()) {
+        if (list.isEmpty() || this.isEmpty()) {
             System.out.println("List is empty to join");
             return;
         }

@@ -20,9 +20,7 @@ public class Assassin extends Character {
         String name = scn.next();
         setName(name);
         setAttributes();
-        System.out.println("Choose your equipment");
-        System.out.println("1 - bow, damage boost,energy boost, defense penalty");
-        System.out.println("2 - dual daggers, defense boost, energy boost");
+        assassinEquipmentMenu();
         int choice = scn.nextInt();
         while (choice != 1 && choice != 2) {
             System.out.println("Please choose you equipment 1 or 2");
@@ -33,6 +31,12 @@ public class Assassin extends Character {
         } else {
             giveDaggers();
         }
+    }
+
+    private void assassinEquipmentMenu() {
+        System.out.println("Choose your equipment");
+        System.out.println("1 - bow, damage boost,energy boost, defense penalty");
+        System.out.println("2 - dual daggers, defense boost, energy boost");
     }
 
     public boolean isCriticalState() {
@@ -88,6 +92,20 @@ public class Assassin extends Character {
             return coolDown;
         }
         Random rnd = new Random();
+        tripleShot(character, rnd);
+        prepareCritical(character);
+        return getSkill().getSkillCooldown();
+    }
+
+    private void prepareCritical(Character character) {
+        if (getSkill().getSkillName().equals("Prepare Critical")) {
+            setCriticalState(true);
+            setEnergy(getEnergy() - getSkill().getSkillCost());
+            System.out.println(getName() + " used Prepare Critical on " + character.getName());
+        }
+    }
+
+    private void tripleShot(Character character, Random rnd) {
         if (getSkill().getSkillName().equals("Triple Shot")) {
             int damage = (getDamage() * 3) - rnd.nextInt(10) + 1;
             character.receiveDamage(damage);
@@ -95,12 +113,6 @@ public class Assassin extends Character {
             System.out.println(getName() + " used Triple Shot on " + character.getName());
             System.out.println(character.getName() + " received " + damage + " damage");
         }
-        if (getSkill().getSkillName().equals("Prepare Critical")) {
-            setCriticalState(true);
-            setEnergy(getEnergy() - getSkill().getSkillCost());
-            System.out.println(getName() + " used Prepare Critical on " + character.getName());
-        }
-        return getSkill().getSkillCooldown();
     }
 
     public void attackCritical(Character character) {

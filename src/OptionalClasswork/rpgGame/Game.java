@@ -15,10 +15,7 @@ public class Game {
     private int npcSkillCooldown;
 
     public static Character gameCreateCharacter() {
-        System.out.println("Please choose your profession");
-        System.out.println("1 - Warrior");
-        System.out.println("2 - Assassin");
-        System.out.println("3 - Mage");
+        professionMenu("Please choose your profession");
         Scanner scn = new Scanner(System.in);
         int choice = scn.nextInt();
         Character chosenCharacter = null;
@@ -26,6 +23,11 @@ public class Game {
             System.out.println("Wrong input try again");
             choice = scn.nextInt();
         }
+        chosenCharacter = professionChoose(choice, chosenCharacter);
+        return chosenCharacter;
+    }
+
+    private static Character professionChoose(int choice, Character chosenCharacter) {
         switch (choice) {
             case 1:
                 Warrior warrior = new Warrior();
@@ -45,11 +47,15 @@ public class Game {
         return chosenCharacter;
     }
 
-    public static Character gameCreateOpponent() {
-        System.out.println("Please choose npc profession");
+    private static void professionMenu(String s) {
+        System.out.println(s);
         System.out.println("1 - Warrior");
         System.out.println("2 - Assassin");
         System.out.println("3 - Mage");
+    }
+
+    public static Character gameCreateOpponent() {
+        professionMenu("Please choose npc profession");
         Scanner scn = new Scanner(System.in);
         int choice = scn.nextInt();
         Character chosenCharacter = null;
@@ -57,23 +63,7 @@ public class Game {
             System.out.println("Wrong input try again");
             choice = scn.nextInt();
         }
-        switch (choice) {
-            case 1:
-                Warrior warrior = new Warrior();
-                warrior = Warrior.getCharacter(warrior);
-                chosenCharacter = warrior;
-                break;
-            case 2:
-                Assassin assassin = new Assassin();
-                assassin = Assassin.getCharacter(assassin);
-                chosenCharacter = assassin;
-                break;
-            case 3:
-                Mage mage = new Mage();
-                mage = Mage.getCharacter(mage);
-                chosenCharacter = mage;
-
-        }
+        chosenCharacter = professionChoose(choice, chosenCharacter);
         return chosenCharacter;
     }
 
@@ -129,10 +119,15 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (player.isStunState()) {
-            player.setStunState(false);
-            return true;
-        } else if (player instanceof Assassin) {
+        if (stunCheckPlayer(player)) return true;
+        attackTurnCasesPlayer(player, npc, rnd);
+        System.out.println();
+        printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
+        return true;
+    }
+
+    private void attackTurnCasesPlayer(Character player, Character npc, Random rnd) {
+        if (player instanceof Assassin) {
             if (((Assassin) player).isCriticalState()) {
                 ((Assassin) player).attackCritical(npc);
             } else if (!useSkillOrNotPlayer(player, npc, rnd)) {
@@ -149,9 +144,14 @@ public class Game {
                 player.attack(npc);
             }
         }
-        System.out.println();
-        printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
-        return true;
+    }
+
+    private boolean stunCheckPlayer(Character player) {
+        if (player.isStunState()) {
+            player.setStunState(false);
+            return true;
+        }
+        return false;
     }
 
     private boolean npcStart(Character player, Character npc, Random rnd) {
@@ -160,10 +160,15 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (npc.isStunState()) {
-            npc.setStunState(false);
-            return false;
-        } else if (npc instanceof Assassin) {
+        if (stunCheckNpc(npc)) return false;
+        attackCasesNpc(player, npc, rnd);
+        System.out.println();
+        printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
+        return false;
+    }
+
+    private void attackCasesNpc(Character player, Character npc, Random rnd) {
+        if (npc instanceof Assassin) {
             if (((Assassin) npc).isCriticalState()) {
                 ((Assassin) npc).attackCritical(player);
             } else if (!useSkillOrNotNpc(npc, player, rnd)) {
@@ -180,8 +185,13 @@ public class Game {
                 }
             }
         }
-        System.out.println();
-        printInGameInfo(player, npc, playerSkillCooldown, npcSkillCooldown);
+    }
+
+    private boolean stunCheckNpc(Character npc) {
+        if (npc.isStunState()) {
+            npc.setStunState(false);
+            return true;
+        }
         return false;
     }
 
@@ -206,17 +216,28 @@ public class Game {
         int dicePlayer = rnd.nextInt(6) + 1;
         int diceNpc = rnd.nextInt(6) + 1;
         printSouts(dicePlayer, diceNpc);
+        if (playerStartCheck(dicePlayer, diceNpc)) return true;
+        if (npcStartCheck(dicePlayer, diceNpc)) return false;
+        return rnd.nextBoolean();
+
+    }
+
+    private boolean npcStartCheck(int dicePlayer, int diceNpc) {
+        if (dicePlayer < diceNpc) {
+            System.out.println();
+            System.out.println("Npc starts first");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean playerStartCheck(int dicePlayer, int diceNpc) {
         if (dicePlayer > diceNpc) {
             System.out.println();
             System.out.println("Players starting first");
             return true;
-        } else if (dicePlayer < diceNpc) {
-            System.out.println();
-            System.out.println("Npc starts first");
-            return false;
-        } else {
-            return rnd.nextBoolean();
         }
+        return false;
     }
 
     private void printSouts(int dicePlayer, int diceNpc) {

@@ -17,9 +17,7 @@ public class Warrior extends Character {
         String name = scn.next();
         setName(name);
         setAttributes();
-        System.out.println("Choose your equipment");
-        System.out.println("1 - greatsword, damage boost, defense penalty");
-        System.out.println("2 - sword and shield, energy boost, defense boost, damage penalty");
+        warriorEquipmentMenu();
         int choice = scn.nextInt();
         while (choice != 1 && choice != 2) {
             System.out.println("Please choose you equipment 1 or 2");
@@ -30,6 +28,12 @@ public class Warrior extends Character {
         } else {
             giveSwordAndShield();
         }
+    }
+
+    private void warriorEquipmentMenu() {
+        System.out.println("Choose your equipment");
+        System.out.println("1 - greatsword, damage boost, defense penalty");
+        System.out.println("2 - sword and shield, energy boost, defense boost, damage penalty");
     }
 
     public void attack(Character character) {
@@ -45,12 +49,12 @@ public class Warrior extends Character {
         if (coolDown > 0) {
             return coolDown;
         }
-        if (getSkill().getSkillName().equals("Slice")) {
-            character.receiveDamage(getSkill().getSkillDamage());
-            setEnergy(getEnergy() - getSkill().getSkillCost());
-            System.out.println(getName() + " used Slice on " + character.getName());
-            System.out.println(character.getName() + " received " + getSkill().getSkillDamage() + " damage");
-        }
+        slice(character);
+        stun(character);
+        return getSkill().getSkillCooldown();
+    }
+
+    private void stun(Character character) {
         if (getSkill().getSkillName().equals("Stun")) {
             character.receiveDamage(getSkill().getSkillDamage());
             character.setStunState(true);
@@ -58,7 +62,15 @@ public class Warrior extends Character {
             System.out.println(getName() + " used Stun on " + character.getName());
             System.out.println(character.getName() + " received " + getSkill().getSkillDamage() + " damage,and stunned");
         }
-        return getSkill().getSkillCooldown();
+    }
+
+    private void slice(Character character) {
+        if (getSkill().getSkillName().equals("Slice")) {
+            character.receiveDamage(getSkill().getSkillDamage());
+            setEnergy(getEnergy() - getSkill().getSkillCost());
+            System.out.println(getName() + " used Slice on " + character.getName());
+            System.out.println(character.getName() + " received " + getSkill().getSkillDamage() + " damage");
+        }
     }
 
     public void receiveDamage(int damage) {

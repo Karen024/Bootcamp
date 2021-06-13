@@ -25,7 +25,7 @@ public class MyArrayList<T> implements List<T> {
 
     private boolean checkIndex(int index) {
         try {
-            if (index < startIndex || index >= lastIndex) {
+            if (index < startIndex || index >= actualIndex) {
                 throw new MyCustomExceptionIndexOutOfBounds();
             }
         } catch (MyCustomExceptionIndexOutOfBounds e) {
@@ -35,6 +35,9 @@ public class MyArrayList<T> implements List<T> {
         return false;
     }
 
+    public int getLastIndex() {
+        return lastIndex;
+    }
 
     @Override
     public void add(T obj) {
@@ -62,10 +65,14 @@ public class MyArrayList<T> implements List<T> {
         if (index < 0) {
             return;
         }
+        moveElements(index);
+        actualIndex--;
+    }
+
+    private void moveElements(int index) {
         for (int i = index; i < actualIndex; i++) {
             array[i] = array[i + 1];
         }
-        actualIndex--;
     }
 
     private boolean nullObjectCheck(T obj) {
@@ -82,9 +89,7 @@ public class MyArrayList<T> implements List<T> {
 
     public void remove(int index) {
         if (checkIndex(index)) return;
-        for (int i = index; i < actualIndex; i++) {
-            array[i] = array[i + 1];
-        }
+        moveElements(index);
         actualIndex--;
     }
 

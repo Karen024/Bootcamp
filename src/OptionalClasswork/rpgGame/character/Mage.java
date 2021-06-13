@@ -18,9 +18,7 @@ public class Mage extends Character {
         String name = scn.next();
         setName(name);
         setAttributes();
-        System.out.println("Choose your equipment");
-        System.out.println("1 - staff, energy boost, damage boost");
-        System.out.println("2 - wand and buckler, energy boost, defense boost,damage boost");
+        mageEquipmentMenu();
         int choice = scn.nextInt();
         while (choice != 1 && choice != 2) {
             System.out.println("Please choose you equipment 1 or 2");
@@ -31,6 +29,12 @@ public class Mage extends Character {
         } else {
             giveWandAndBuckler();
         }
+    }
+
+    private void mageEquipmentMenu() {
+        System.out.println("Choose your equipment");
+        System.out.println("1 - staff, energy boost, damage boost");
+        System.out.println("2 - wand and buckler, energy boost, defense boost,damage boost");
     }
 
     public void attack(Character character) {
@@ -50,19 +54,27 @@ public class Mage extends Character {
         if (coolDown > 0) {
             return coolDown;
         }
-        if (getSkill().getSkillName().equals("Fireball")) {
-            character.receiveDamage(getSkill().getSkillDamage());
-            setEnergy(getEnergy() - getSkill().getSkillCost());
-            System.out.println(getName() + " used Fireball on " + character.getName());
-            System.out.println(character.getName() + " received " + getSkill().getSkillDamage() + " damage");
-        }
+        fireball(character);
+        magicShield();
+        return getSkill().getSkillCooldown();
+    }
+
+    private void magicShield() {
         if (getSkill().getSkillName().equals("Magic Shield")) {
             setEnergy(getEnergy() - getSkill().getSkillCost());
             setHealth(getHealth() + getSkill().getSkillDamage());
             System.out.println(getName() + " used Magic Shield ");
             System.out.println(getName() + " healed by " + getSkill().getSkillDamage() + " points");
         }
-        return getSkill().getSkillCooldown();
+    }
+
+    private void fireball(Character character) {
+        if (getSkill().getSkillName().equals("Fireball")) {
+            character.receiveDamage(getSkill().getSkillDamage());
+            setEnergy(getEnergy() - getSkill().getSkillCost());
+            System.out.println(getName() + " used Fireball on " + character.getName());
+            System.out.println(character.getName() + " received " + getSkill().getSkillDamage() + " damage");
+        }
     }
 
     private void giveWandAndBuckler() {
