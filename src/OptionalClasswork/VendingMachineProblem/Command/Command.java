@@ -1,6 +1,8 @@
 package OptionalClasswork.VendingMachineProblem.Command;
 
 import OptionalClasswork.VendingMachineProblem.Main.Money;
+import OptionalClasswork.VendingMachineProblem.Main.Result;
+import OptionalClasswork.VendingMachineProblem.VendingMachine.VendingMachine;
 
 import java.util.Objects;
 
@@ -11,9 +13,14 @@ public class Command {
     public Command() {
     }
 
-    public Command(Money moneyValue, int index) {
-        this.moneyValue = moneyValue;
+    public void commandCreation(Money money, int index) {
+        moneyValue = money;
         this.index = index;
+    }
+
+    public Result commandExecution(VendingMachine vendingMachine) {
+        Result result = vendingMachine.executeCommand(this);
+        return result;
     }
 
     public int getIndex() {

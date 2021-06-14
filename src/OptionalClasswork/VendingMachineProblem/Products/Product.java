@@ -1,8 +1,8 @@
 package OptionalClasswork.VendingMachineProblem.Products;
 
-import OptionalClasswork.VendingMachineProblem.Main.Money;
+import java.io.Serializable;
 
-public abstract class Product {
+public abstract class Product implements Serializable {
     abstract public String getName();
 
     abstract public int getCost();
