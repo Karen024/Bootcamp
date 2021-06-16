@@ -6,13 +6,9 @@ public class Main {
     public static void main(String[] args) {
         File file = new File("C:\\Users\\Mher\\IdeaProjects\\Classwork\\src\\OptionalClasswork\\javaInputOutputProblems\\newProblem2\\datafile.txt");
         generateFile(file);
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            DataInputStream dataInputStream = new DataInputStream(fileInputStream);
-            long position = dataInputStream.readLong();
-            System.out.println(position);
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            bufferedReader.skip(position);
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
+            dataInputStream.readLong();
             System.out.println(dataInputStream.readInt());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -23,9 +19,9 @@ public class Main {
 
 
     public static void generateFile(File file) {
-        try(RandomAccessFile raf = new RandomAccessFile(file, "rw")) {
+        try (RandomAccessFile raf = new RandomAccessFile(file, "rw")) {
             int data = 123;
-            raf.writeLong(3);
+            raf.writeLong(26);
             raf.writeInt(data);
         } catch (FileNotFoundException e) {
             System.err.println("This shouldn't happen: " + e);
