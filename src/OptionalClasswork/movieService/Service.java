@@ -152,4 +152,5 @@ public class Service {
         dataBase.getMovieList().get(ID - 1).setName(name);
         System.out.println("Movie name with ID = " + ID + " updated");
     }
+
 }
